@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>觀光局</h1>
+<div class="row" id="spots"></div>
+
+@section Scripts{
+        <script src="~/js/travel.js"></script>
+        <script>
+            console.log(spots.CommonFormat.Section);
+                const html = `
+        ${spots.CommonFormat.Section.map((spot, index) => {
+            // 檢查圖片是否為陣列
+            const carouselItems = Array.isArray(spot.file.img) ? spot.file.img.map((img, imgIndex) => `
+                <div class="carousel-item ${imgIndex === 0 ? 'active' : ''}">
+                        <img src="${img.text}" class="d-block w-100" alt="${spot.stitle}">
+                </div>
+            `).join('') : '';
+
+            // 尚未完成輪播圖
+            return `
+                <div class="col-6 mb-2">
+                    <div class="card h-100">
+                        <div id="carousel-${index}" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                ${carouselItems}
+                            </div>
+                            <a class="carousel-control-prev" href="#carousel-${index}" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carousel-${index}" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">${spot.stitle}</h5>
+                            <p class="card-text">${spot.xbody}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('')}
+    `;
+
+    document.querySelector('#spots').innerHTML = html;
+
+        </script>
+}
